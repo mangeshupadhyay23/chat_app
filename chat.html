@@ -1,0 +1,80 @@
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+<style>
+    input{
+        width: 100%;
+        height: 60px;
+        font-size: 40px;
+        font-weight: bold;
+    }
+    #messages{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+     #messages li{
+         padding: 5px 10px;
+     }
+
+     #messages li:nth-child(odd){
+         background-color: rgb(217, 245, 245);
+     }
+     #messages li:nth-child(even){
+         background-color: rgb(240, 205, 205);
+     }
+</style>
+<div >
+    <div >
+        <div >
+            <form id='message-form'>
+                <div >
+                    <input id="user-message" type="text" placeholder="Enter your message"/>
+                </div>
+                <div > 
+                    <button class="btn btn-primary" typer="submit" >Send</button>
+                </div>
+            </form>
+            <ul id="messages">
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script>
+    const socket=io("http://localhost:9000");
+
+    
+
+    socket.on('messageFromServer',(datafromServer)=>{
+        console.log(datafromServer);
+        socket.emit('dataToServer',{data:"Data from Client!"})
+    })
+
+    socket.on('connect',()=>{
+        console.log(socket.id);
+    })
+
+    document.getElementById('message-form').addEventListener('submit',(event)=>{
+        event.preventDefault();
+        const newMessage = document.getElementById('user-message').value;
+        socket.emit('newMessageToServer',{text:newMessage});
+    })
+
+    socket.on('messageToClients',(msg)=>{
+        document.getElementById('messages').innerHTML+=  `<li> ${msg.text} </li>`;
+    } )
+
+
+    // socket.on('ping',()=>{
+    //     console.log("Ping was received from the server");
+    // })
+
+    // socket.on('pong',(latency)=>{
+    //     console.log(latency);
+    //     console.log("Pong ws sent to the server");
+    // })
+    
+</script>
