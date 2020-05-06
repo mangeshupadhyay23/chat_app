@@ -35,22 +35,23 @@ namespaces.forEach((namespace) => {
     nsSocket.emit("nsRoomLoad", namespace.rooms);
     nsSocket.on("joinRoom", (roomName, callbackToGetNumberOfUsers) => {
       // console.log(roomName);
+      // we will take the name of old room every time and leave it before joining the room
+      // if new and old both room are same still there wont be a problem u will stay in the same room
+      const roomToBeLeft = Object.keys(nsSocket.rooms)[1];
+      nsSocket.leave(roomToBeLeft);
+      updateNumberOfUserInRoom(namespace, roomToBeLeft); //users will be updated after leaving a room everytime
       nsSocket.join(roomName);
-      io.of("/wiki")
-        .in(roomName)
-        .clients((error, clients) => {
-          console.log(clients.length);
-          callbackToGetNumberOfUsers(clients.length);
-        });
-      const nsRoom = namespaces[0].rooms.find((room) => {
+      // io.of("/wiki")
+      //   .in(roomName)
+      //   .clients((error, clients) => {
+      //     console.log(clients.length);
+      //     callbackToGetNumberOfUsers(clients.length);
+      //   });
+      const nsRoom = namespace.rooms.find((room) => {
         return room.roomTitle === roomName;
       });
       nsSocket.emit("messageHistory", nsRoom.history);
-      io.of("/wiki")
-        .in(roomName)
-        .clients((error, clients) => {
-          console.log(`there are ${clients.length} in this room`);
-        });
+      updateNumberOfUserInRoom(namespace, roomName); // users will be update after joining as well
     });
     nsSocket.on("newMessageToServer", (msg) => {
       const msgFormat = {
@@ -64,14 +65,27 @@ namespaces.forEach((namespace) => {
       //nsSocekt.rooms gives an object containing socketID connected with namespace and name or room inside the namespace
       // but it isnt in the form of an array so we have to extract the keys of the object so we use Object.keys fucntion which gives u an array of all the keys present inside socket.rooms
       const roomTitle = Object.keys(nsSocket.rooms)[1];
-      const nsRoom = namespaces[0].rooms.find((room) => {
+      const nsRoom = namespace.rooms.find((room) => {
         return room.roomTitle === roomTitle;
       });
       console.log("the room we wanted matches this rooms title");
       nsRoom.addMessage(msgFormat);
       console.log(nsRoom);
 
-      io.of("/wiki").to(roomTitle).emit("messageToClients", msgFormat);
+      io.of(namespace.endpoint)
+        .to(roomTitle)
+        .emit("messageToClients", msgFormat);
     });
   });
 });
+
+function updateNumberOfUserInRoom(namespace, roomName) {
+  io.of(namespace.endpoint)
+    .in(roomName)
+    .clients((error, clients) => {
+      // console.log(`there are ${clients.length} in this room`);
+      io.of(namespace.endpoint)
+        .in(roomName)
+        .emit("updateMembers", clients.length);
+    });
+}

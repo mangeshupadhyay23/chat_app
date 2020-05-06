@@ -25,10 +25,10 @@ socket.on("nsList", (nsData) => {
       e.preventDefault();
       // you will move to given namespace endpoint
       const nsEndpoint = elem.getAttribute("ns");
-      console.log(`i want to move to ${nsEndpoint}`);
+      // console.log(`i want to move to ${nsEndpoint}`);
+      joiningNamespace(nsEndpoint);
     });
   });
-  joiningNamespace("/wiki");
 });
 
 // socket.on("connect", () => {

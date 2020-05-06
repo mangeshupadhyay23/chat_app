@@ -1,4 +1,11 @@
 function joiningNamespace(endpoint) {
+  if (nsSocket) {
+    // check to see if its not closed
+    nsSocket.close();
+    document
+      .querySelector("#user-input")
+      .removeEventListener("submit", submissionHandler);
+  }
   nsSocket = io(`http://localhost:9000${endpoint}`);
   nsSocket.on("nsRoomLoad", (nsRooms) => {
     // console.log(nsRooms);
@@ -19,7 +26,8 @@ function joiningNamespace(endpoint) {
     let roomNodes = document.getElementsByClassName("room");
     Array.from(roomNodes).forEach((elem) => {
       elem.addEventListener("click", (e) => {
-        console.log("Someone clicked me", e.target.innerText);
+        // console.log("Someone clicked me", e.target.innerText);
+        joinRoom(e.target.innerText);
       });
     });
     //automatically enter into the room when join a namespace
@@ -37,11 +45,13 @@ function joiningNamespace(endpoint) {
 
   document
     .querySelector(".message-form")
-    .addEventListener("submit", (event) => {
-      event.preventDefault();
-      const newMessage = document.getElementById("user-message").value;
-      nsSocket.emit("newMessageToServer", { text: newMessage });
-    });
+    .addEventListener("submit", submissionHandler);
+}
+
+function submissionHandler(event) {
+  event.preventDefault();
+  const newMessage = document.getElementById("user-message").value;
+  nsSocket.emit("newMessageToServer", { text: newMessage });
 }
 
 function messgaeFormat(msg) {
