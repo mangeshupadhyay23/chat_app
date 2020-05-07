@@ -7,6 +7,7 @@ function joiningNamespace(endpoint) {
       .removeEventListener("submit", submissionHandler);
   }
   nsSocket = io(`http://localhost:9000${endpoint}`);
+  console.log(`${endpoint}`);
   nsSocket.on("nsRoomLoad", (nsRooms) => {
     // console.log(nsRooms);
     let roomList = document.querySelector(".room-list");
@@ -19,7 +20,7 @@ function joiningNamespace(endpoint) {
         glyph = "globe";
       }
       roomList.innerHTML += `<li class='room'>
-    <span class="glyphicon glyphicon-${glyph}"></span>${room.roomTitle}
+     <img src="https://i.ibb.co/R92wPDM/icons8-user-24.png" alt="user_icon">${room.roomTitle}
   </li>`;
     });
     //clicklistener
@@ -33,7 +34,7 @@ function joiningNamespace(endpoint) {
     //automatically enter into the room when join a namespace
     const topRoom = document.querySelector(".room"); // queryselector automatically finds first element with given tag
     const topRoomName = topRoom.innerText;
-    console.log(topRoomName);
+
     joinRoom(topRoomName);
   });
 

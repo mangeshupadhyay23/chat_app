@@ -25,7 +25,7 @@ body {
 .room-list li {
   cursor: pointer;
   list-style-type: none;
-  padding: 0px 15px;
+  padding: 10px 15px;
 }
 
 .room-list li span {
@@ -34,13 +34,14 @@ body {
 
 .room-list li.active {
   background-color: #61afef;
-  color: #fff;
+  color: rgb(133, 117, 117);
 }
 
 .rooms {
   background: #3b4048;
   min-height: 100vh;
-  color: #abb2bf;
+  color: #eaeff7;
+  padding: 10px;
 }
 
 .chat-panel {
@@ -84,7 +85,7 @@ body {
 input {
   width: 100%;
   height: 34px;
-  color: #abb2bf;
+  color: #000000;
   border: 1px solid #3b4048;
   border-radius: 5px;
   padding-left: 5px;

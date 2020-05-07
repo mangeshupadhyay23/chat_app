@@ -6,7 +6,6 @@ class Room {
     this.privateRoom = privateRoom;
     this.history = [];
   }
-
   addMessage(message) {
     this.history.push(message);
   }

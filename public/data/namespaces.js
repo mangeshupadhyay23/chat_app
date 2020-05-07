@@ -4,40 +4,40 @@ const Room = require("../classes/room");
 
 // Set up the namespaces
 let namespaces = [];
-let wikiNs = new Namespace(
+let familyNs = new Namespace(
   0,
-  "Wiki",
-  "https://upload.wikimedia.org/wikipedia/en/thumb/8/80/Wikipedia-logo-v2.svg/103px-Wikipedia-logo-v2.svg.png",
-  "/wiki"
+  "Family",
+  "https://i.ibb.co/SRh4sgk/family.png",
+  "/family"
 );
-let mozNs = new Namespace(
+let acadNs = new Namespace(
   1,
-  "Mozilla",
-  "https://www.mozilla.org/media/img/logos/firefox/logo-quantum.9c5e96634f92.png",
-  "/mozilla"
+  "Academics",
+  "https://i.ibb.co/1rjsyxj/online.png",
+  "/academics"
 );
-let linuxNs = new Namespace(
+let friendsNs = new Namespace(
   2,
-  "Linux",
-  "https://upload.wikimedia.org/wikipedia/commons/a/af/Tux.png",
-  "/linux"
+  "Friends",
+  "https://i.ibb.co/m9HwRj9/miscellaneous.png",
+  "/friends"
 );
 
 // Make the main room and add it to rooms. it will ALWAYS be 0
-wikiNs.addRoom(new Room(0, "New Articles", "Wiki"));
-wikiNs.addRoom(new Room(1, "Editors", "Wiki"));
-wikiNs.addRoom(new Room(2, "Other", "Wiki"));
+familyNs.addRoom(new Room(0, "Mummy", "Family"));
+familyNs.addRoom(new Room(1, "Papa", "Family"));
+familyNs.addRoom(new Room(2, "Didi", "Family"));
 
-mozNs.addRoom(new Room(0, "Firefox", "Mozilla"));
-mozNs.addRoom(new Room(1, "SeaMonkey", "Mozilla"));
-mozNs.addRoom(new Room(2, "SpiderMonkey", "Mozilla"));
-mozNs.addRoom(new Room(3, "Rust", "Mozilla"));
+acadNs.addRoom(new Room(0, "Physics", "Academics"));
+acadNs.addRoom(new Room(1, "Chemistry", "Academics"));
+acadNs.addRoom(new Room(2, "Maths", "Academics"));
+acadNs.addRoom(new Room(3, "DC", "Academics"));
 
-linuxNs.addRoom(new Room(0, "Debian", "Linux"));
-linuxNs.addRoom(new Room(1, "Red Hat", "Linux"));
-linuxNs.addRoom(new Room(2, "MacOs", "Linux"));
-linuxNs.addRoom(new Room(3, "Kernal Development", "Linux"));
+friendsNs.addRoom(new Room(0, "Hardik", "Friends"));
+friendsNs.addRoom(new Room(1, "Netflix", "Friends"));
+friendsNs.addRoom(new Room(2, "Bharat", "Friends"));
+friendsNs.addRoom(new Room(3, "Harsh", "Friends"));
 
-namespaces.push(wikiNs, mozNs, linuxNs);
+namespaces.push(familyNs, acadNs, friendsNs);
 
 module.exports = namespaces;

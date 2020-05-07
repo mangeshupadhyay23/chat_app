@@ -11,6 +11,7 @@ const expressServer = app.listen(9000);
 const io = socketio(expressServer); // io is server and io.(anything ) then anything is socket i.e server.socket
 
 io.on("connection", (socket) => {
+  console.log(socket.handshake);
   // build an array to pass down images and endpoint for each Namespace
   let nsData = namespaces.map((ns) => {
     return {
@@ -29,6 +30,8 @@ io.on("connection", (socket) => {
 
 namespaces.forEach((namespace) => {
   io.of(namespace.endpoint).on("connection", (nsSocket) => {
+    const username = nsSocket.handshake.query.username;
+    const avatar = nsSocket.handshake.query.avatar;
     // console.log(`${nsSocket.id} has joined ${namespace.endpoint}`);
     // when this happens it means namespace has been connected an the info of that namespace
     // will be sent to client
@@ -41,6 +44,7 @@ namespaces.forEach((namespace) => {
       nsSocket.leave(roomToBeLeft);
       updateNumberOfUserInRoom(namespace, roomToBeLeft); //users will be updated after leaving a room everytime
       nsSocket.join(roomName);
+
       // io.of("/wiki")
       //   .in(roomName)
       //   .clients((error, clients) => {
@@ -50,15 +54,21 @@ namespaces.forEach((namespace) => {
       const nsRoom = namespace.rooms.find((room) => {
         return room.roomTitle === roomName;
       });
-      nsSocket.emit("messageHistory", nsRoom.history);
+
+      // console.log(namespace.rooms);
+
+      // console.log(nsRoom);
+      // console.log(nsRoom.history);
+      nsSocket.emit("historyCatchUp", nsRoom.history);
+
       updateNumberOfUserInRoom(namespace, roomName); // users will be update after joining as well
     });
     nsSocket.on("newMessageToServer", (msg) => {
       const msgFormat = {
         text: msg.text,
         time: Date.now(),
-        username: "mangesh",
-        avatar: "https://via.placeholder.com/30",
+        username: username,
+        avatar: avatar,
       };
 
       console.log(msgFormat);
@@ -68,9 +78,12 @@ namespaces.forEach((namespace) => {
       const nsRoom = namespace.rooms.find((room) => {
         return room.roomTitle === roomTitle;
       });
+      console.log(roomTitle);
+      // console.log(nsSocket);
       console.log("the room we wanted matches this rooms title");
-      nsRoom.addMessage(msgFormat);
+      console.log(namespace.rooms[0].roomTitle);
       console.log(nsRoom);
+      nsRoom.addMessage(msgFormat);
 
       io.of(namespace.endpoint)
         .to(roomTitle)

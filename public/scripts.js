@@ -1,4 +1,9 @@
-const socket = io("http://localhost:9000");
+const username = prompt("Type Your Username");
+const avatar = prompt("image link for you avatar");
+
+const socket = io("http://localhost:9000", {
+  query: { username, avatar },
+});
 let nsSocket = ""; //to declare it as global variable
 // const socket2 = io("http://localhost:9000/wiki");
 // const socket3 = io("http://localhost:9000/mozilla");

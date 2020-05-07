@@ -1,6 +1,6 @@
 function joinRoom(roomName) {
   nsSocket.emit("joinRoom", roomName, (numberOfUser) => {});
-
+  console.log(roomName);
   nsSocket.on("messageHistory", (history) => {
     // console.log(history);
     const messagesUl = document.querySelector("#messages");
